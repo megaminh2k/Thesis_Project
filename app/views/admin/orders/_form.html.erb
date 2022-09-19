@@ -6,97 +6,52 @@
       </div>
       <div class="card-body">
         <%= form_for [:admin, @order] do |form| %>
-        <div class="field">
-          <h3>
-          <%= form.label t("admin.order.current_status") %>
-          <%= style_status(@order.status) %>
-          </h3>
-        </div>
-
-        <% if can_change?(@order.status) %>
-        <div class="control-group">
-          <%= form.label t("admin.order.update_status"), class: "control-label" %>
-          <div class="col-sm-2">
-            <%= form.select :status, options_for_status(@order.status), {}, class: "form-select form-select" %>
+          <div class="field">
+            <h3>
+              <%= form.label t("admin.order.current_status") %>
+              <%= style_status(@order.status) %>
+            </h3>
           </div>
-        </div>
-        <% end %>
+          <% if can_change?(@order.status) %>
+            <div class="control-group">
+              <%= form.label t("admin.order.update_status"), class: "control-label" %>
+              <div class="col-sm-2">
+                <%= form.select :status, options_for_status(@order.status), {}, class: "form-select form-select" %>
+              </div>
+            </div>
+          <% end %>
 
-        <table class = "table table-striped">
-          <thead>
-            <tr>
-              <th><%= t "admin.order.quantity" %></th>
-              <th><%= t "admin.order.price" %></th>
-              <th><%= t "admin.order.name" %></th>
-            </tr>
-          </thead>
-
-          <tbody>
-            <% @order_details.includes([:product]).each do |order_detail| %>
+          <table class = "table table-striped">
+            <thead>
               <tr>
-                <td><%= order_detail.quantity %></td>
-                <td><%= order_detail.product.price %></td>
-                <td><%= order_detail.name %></td>
+                <th><%= t "admin.order.quantity" %></th>
+                <th><%= t "admin.order.price" %></th>
+                <th><%= t "admin.order.name" %></th>
               </tr>
-            <% end %>
-          </tbody>
-        </table>
-
-        <div class="field">
-          <%= form.label t("admin.order.total") %>
-          <%= @order.amount %>
-        </div>
-
-        <% if can_change?(@order.status) %>
-          <div class="actions">
-            <div style = "submit_padding"><%= form.submit t("submit"), class: "btn btn-success" %></div>
+            </thead>
+            <tbody>
+              <% @order_details.includes([:product]).each do |order_detail| %>
+                <tr>
+                  <td><%= order_detail.quantity %></td>
+                  <td><%= order_detail.product.price %></td>
+                  <td><%= order_detail.name %></td>
+                </tr>
+              <% end %>
+            </tbody>
+          </table>
+          <div class="field">
+            <%= form.label t("admin.order.total") %>
+            <%= @order.amount %>
           </div>
-        <% end %>
-        <br>
-        <%= link_to t("admin.category.back_index"), admin_orders_path, class: "btn btn-primary" %>
-        <%= link_to t("admin.category.back_user"), admin_user_path(@order.user), class: "btn btn-primary" %>
-        <% end %>
+          <% if can_change?(@order.status) %>
+            <div class="actions">
+              <div style = "submit_padding"><%= form.submit t("submit"), class: "btn btn-success" %></div>
+            </div>
+          <% end %>
+          <br>
+          <%= link_to t("admin.category.back_index"), admin_orders_path, class: "btn btn-primary" %>
+          <%= link_to t("admin.category.back_user"), admin_user_path(@order.user), class: "btn btn-primary" %>
+<% end %>
       </div>
     </div>
   </div>
-
-  <div class="control-group">
-    <%= form.label t("admin.order.update_status"), class: "control-label" %>
-    <%= form.select(:status, Order.statuses.keys) %>
-  </div>
-
-  <table class = "table">
-    <thead>
-      <tr>
-        <th><%= t "admin.order.quantity" %></th>
-        <th><%= t "admin.order.price" %></th>
-        <th><%= t "admin.order.name" %></th>
-      </tr>
-    </thead>
-
-    <tbody>
-      <% @order_details.includes([:product]).each do |order_detail| %>
-        <tr>
-          <td><%= order_detail.quantity %></td>
-          <td><%= order_detail.price %></td>
-          <td><%= order_detail.name %></td>
-        </tr>
-      <% end %>
-    </tbody>
-  </table>
-
-  <div class="field">
-    <%= form.label t("admin.order.total") %>
-    <%= @order.amount %>
-  </div>
-
-  <div class="actions">
-    <div style = "submit_padding">
-      <%= form.submit %>
-    </div>
-  </div>
-
-  <%= link_to t("admin.category.back_index"), admin_orders_path %>
-  <%= link_to t("admin.category.back_user"), admin_user_path(@order.user) %>
-  <% end %>
-</div>
